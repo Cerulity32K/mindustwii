@@ -44,3 +44,9 @@ One thing I will need to look into more is const and lvalue/rvalue qualifiers (`
 
 ## Compiling
 You will need devkitPPC to compile. The codebase uses the `gnu++20` standard. Run the included makefile to compile the game.
+
+## Controls
+- Nunchuk joystick (or D-pad if not connected) - Fly
+- A - Place small (1x1) block at cursor
+- B - Place big (2x2) block at cursor (bottom left corner)
+- Minus - Destroy block at cursor
