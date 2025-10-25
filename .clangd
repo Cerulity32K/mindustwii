@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-std=gnu++20, -fexperimental-library, -I/opt/devkitpro/libogc/include, -I/opt/devkitpro/libogc/ogc, -DHW_RVL, -Wall]
