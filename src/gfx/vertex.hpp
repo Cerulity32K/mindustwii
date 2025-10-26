@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../math/math.hpp"
-
 #include <ogc/lwp_queue.h>
 #include <gcutil.h>
 #include <wiiuse/wiiuse.h>
+
+#include "../math/math.hpp"
 
 namespace gfx {
     /// A color type.

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../gfx/renderer.hpp"
-#include "../krystl.hpp"
-
 #include <functional>
 #include <map>
 #include <memory>
 #include <variant>
+
+#include "../gfx/renderer.hpp"
+#include "../krystl.hpp"
 
 namespace game {
 struct block_position {
@@ -33,10 +33,16 @@ struct block_position {
 class block {
 public:
     constexpr virtual fn size() const -> u8 { return 1; }
+    constexpr virtual fn color() const -> gfx::color {
+        return {255, 0, 0, 255};
+    }
 };
 class big_block : public block {
 public:
     constexpr fn size() const -> u8 override { return 2; }
+    constexpr fn color() const -> gfx::color override {
+        return {0, 0, 255, 255};
+    }
 };
 class factory {
 private:
@@ -51,7 +57,8 @@ public:
             gfx::draw_square(
                 0,
                 {(f32)position.x + size, (f32)position.y + size},
-                {(f32)size, (f32)size}
+                {(f32)size, (f32)size},
+                block->color()
             );
         }
     }

@@ -8,6 +8,8 @@
 #define mut auto
 #define moved auto&&
 #define fn auto
+#define local static
+#define global extern
 
 typedef uint8_t u8;
 typedef uint16_t u16;

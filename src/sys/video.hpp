@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ogc/gx_struct.h"
 #include <cstring>
 #include <malloc.h>
 
+#include <ogc/gx_struct.h>
 #include <ogc/gx.h>
 #include <ogc/system.h>
 #include <ogc/video.h>

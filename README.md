@@ -1,4 +1,4 @@
-# Wiindustry
+# Mindustwii
 A (currently unfinished) factory game for the Wii.
 
 Heavily inspired by Mindustry.

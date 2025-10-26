@@ -42,52 +42,62 @@ fn initialise(video::initialisation_data data) -> void {
     GX_SetDispCopyGamma(GX_GM_1_0);
 }
 
+GXTexObj texture;
 fn setup_vertex_attributes() -> void {
     GX_ClearVtxDesc();
 
     GX_SetVtxDesc(GX_VA_POS, GX_INDEX16);
     GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
 
-    GX_SetVtxDesc(GX_VA_CLR0, GX_INDEX16);
+    GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
     GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
 
+    GX_SetVtxDesc(GX_VA_TEX0, GX_INDEX16);
+    GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
     GX_SetNumChans(1);
-    GX_SetNumTexGens(0);
-    GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORDNULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GX_SetNumTexGens(1);
+    GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    
+    GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
 }
 
-fn draw_preamble(gfx::vertex* vertices, u16 count, draw_flags flags) -> void {
+local fn draw_preamble(const gfx::vertex* vertices, u16 count, draw_flags flags)
+    -> void {
     if (!!(flags & draw_flags::invalidate_cache)) {
         cache::flush_data_range(vertices, sizeof(gfx::vertex) * count);
     }
 
-    GX_SetArray(GX_VA_POS, &vertices[0].position, sizeof(gfx::vertex));
-    GX_SetArray(GX_VA_CLR0, &vertices[0].color, sizeof(gfx::vertex));
+    GX_SetArray(GX_VA_POS, (void*)&vertices[0].position, sizeof(gfx::vertex));
+    GX_SetArray(GX_VA_TEX0, (void*)&vertices[0].uv, sizeof(gfx::vertex));
 
     GX_Begin(GX_TRIANGLES, GX_VTXFMT0, count);
 }
 
 fn draw_indexed(
-    gfx::vertex* vertices, u16* indices, u16 index_count, draw_flags flags
+    const gfx::vertex* vertices, u16* indices, u16 index_count, draw_flags flags
 ) -> void {
     draw_preamble(vertices, index_count, flags);
 
     for (u16 i = 0; i < index_count; i++) {
         u16 index = indices[i];
         GX_Position1x16(index);
-        GX_Color1x16(index);
+        GX_TexCoord1x16(index);
+        GX_Color1u32(*(u32*)&vertices[index].color);
     }
 
     GX_End();
 }
 
-fn draw_array(gfx::vertex* vertices, u16 count, draw_flags flags) -> void {
+fn draw_array(const gfx::vertex* vertices, u16 count, draw_flags flags)
+    -> void {
     draw_preamble(vertices, count, flags);
 
     for (u16 i = 0; i < count; i++) {
         GX_Position1x16(i);
-        GX_Color1x16(i);
+        GX_TexCoord1x16(i);
+        GX_Color1u32(*(u32*)&vertices[i].color);
     }
 
     GX_End();

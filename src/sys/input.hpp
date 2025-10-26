@@ -5,8 +5,8 @@
 #include <wiiuse/wpad.h>
 
 #include "../math/math.hpp"
-#include "../rusty.hpp"
 #include "../krystl.hpp"
+#include "../rusty.hpp"
 
 namespace input {
 

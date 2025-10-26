@@ -1,3 +1,16 @@
+#include <cstdlib>
+#include <functional>
+#include <map>
+#include <memory>
+#include <variant>
+
+#include <ogc/console.h>
+#include <ogc/conf.h>
+#include <ogc/gu.h>
+#include <ogc/system.h>
+#include <wiiuse/wpad.h>
+#include <wiiuse/wiiuse.h>
+
 #include "sys/cache.hpp"
 #include "sys/graphics.hpp"
 #include "sys/input.hpp"
@@ -9,19 +22,10 @@
 #include "gfx/vertex.hpp"
 #include "gfx/renderer.hpp"
 
-#include "rusty.hpp"
-#include "wiiuse/wiiuse.h"
-
 #include "game/unit.hpp"
 #include "game/factory.hpp"
 
-#include <cstdlib>
-
-#include <ogc/console.h>
-#include <ogc/conf.h>
-#include <ogc/gu.h>
-#include <ogc/system.h>
-#include <wiiuse/wpad.h>
+#include "rusty.hpp"
 
 fn audio_filler(u8* buffer) {
     for (usize i = 0; i < audio::BUFFER_SIZE; i++) {
@@ -190,10 +194,12 @@ fn main() -> int {
         );
         graphics::start_drawing();
         factory.draw();
-        gfx::draw_square(player.angle, player.position, {0.25, 0.25});
+        gfx::draw_square(
+            player.angle, player.position, {0.25, 0.25}, {0, 0, 0, 255}
+        );
 
         cursor_world_position.then([&](math::vec2f ir_position) {
-            gfx::draw_square(0, ir_position, {0.1, 0.1});
+            gfx::draw_square(0, ir_position, {0.1, 0.1}, {0, 255, 0, 255});
         });
 
         graphics::stop_drawing();
